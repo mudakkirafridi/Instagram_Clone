@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/resources/auth_method.dart';
 import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +16,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -45,9 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //button login
             const SizedBox(height: 24,),
             InkWell(
-              onTap: (){
-            
-              },
+              onTap: loginUser,
               child: Container(
                 
                 width: double.infinity,
@@ -59,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   color: blueColor
                 ),
-                child: const Text('LogIn'),
+                child: _isLoading ? const Center(child: CircularProgressIndicator(color: Colors.white,),) : const Text('LogIn'),
               ),
             ),
             const SizedBox(height: 12,),
@@ -88,5 +90,15 @@ class _LoginScreenState extends State<LoginScreen> {
       )
       ),
     );
+  }
+
+  void loginUser()async {
+   String res = await AuthMethod().loginUser(email: _emailController.text, password: _passwordController.text);
+   if (res == "success") {
+     // do this
+   } else {
+     // do this
+     mySnackbar(context, res);
+   }
   }
 }
